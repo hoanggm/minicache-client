@@ -1,0 +1,156 @@
+package org.client.service;
+
+import org.client.exception.IntegrationException;
+import org.client.pool.MiniCacheCluster;
+
+public class IntegrationService {
+    private final MiniCacheCluster clusterClient;
+
+    public IntegrationService(MiniCacheCluster clusterClient) {
+        this.clusterClient = clusterClient;
+    }
+
+    public String get(String key) {
+        try {
+            return clusterClient.get(key);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_GET", e);
+        }
+    }
+
+    public String set(String key, String value) {
+        try {
+            return clusterClient.set(key, value);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_SET", e);
+        }
+    }
+
+    public String set(String key, String value, Boolean notExist) {
+        try {
+            return clusterClient.set(key, value, notExist);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_SET", e);
+        }
+    }
+
+    public String set(String key, String value, Boolean notExist, Integer timeToLive) {
+        try {
+            return clusterClient.set(key, value, notExist, timeToLive);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_SET", e);
+        }
+    }
+
+    public Boolean del(String key) {
+        try {
+            return clusterClient.del(key);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_DEL", e);
+        }
+    }
+
+    public Boolean exists(String key) {
+        try {
+            return clusterClient.exists(key);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_EXISTS", e);
+        }
+    }
+
+    public Boolean bfExists(String key, String value) {
+        try {
+            return clusterClient.bfExist(key, value);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_BF_EXISTS", e);
+        }
+    }
+
+    public String bfInit(String key, Integer expectedElements, Double falsePositive) {
+        try {
+            return clusterClient.bfInit(key, expectedElements, falsePositive);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_BF_INIT", e);
+        }
+    }
+
+    public String bfAdd(String key, String value) {
+        try {
+            return clusterClient.bfAdd(key, value);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_BF_ADD", e);
+        }
+    }
+
+    public String zScore(String key, String member) {
+        try {
+            return clusterClient.zScore(key, member);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_Z_SCR", e);
+        }
+    }
+
+    public String zAdd(String key, Double score, String member, String value) {
+        try {
+            return clusterClient.zAdd(key, score, member, value);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_Z_ADD", e);
+        }
+    }
+
+    public Boolean zRem(String key, String member) {
+        try {
+            return clusterClient.zRem(key, member);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_Z_RM", e);
+        }
+    }
+
+    public Boolean zDel(String key) {
+        try {
+            return clusterClient.zDel(key);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_Z_DEL", e);
+        }
+    }
+
+    public String zRank(String key, String member) {
+        try {
+            return clusterClient.zRank(key, member);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_Z_RANK", e);
+        }
+    }
+
+    public String zRangeByPositions(String key, Integer start, Integer stop) {
+        try {
+            return clusterClient.zRangeByPositions(key, start, stop);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_Z_RAN", e);
+        }
+    }
+
+    public String zRangeByScore(String key, Double minScore, Double maxScore) {
+        try {
+            return clusterClient.zRangeByScore(key, minScore, maxScore);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_Z_RSCR", e);
+        }
+    }
+
+    public Boolean zIncrBy(String key, Double increment, String member) {
+        try {
+            return clusterClient.zIncrBy(key, increment, member);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_Z_INCR", e);
+        }
+    }
+
+    public String zGetByPosition(String key, Integer position) {
+        try {
+            return clusterClient.zGetByPosition(key, position);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_Z_POS", e);
+        }
+    }
+}
