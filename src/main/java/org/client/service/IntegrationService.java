@@ -82,6 +82,22 @@ public class IntegrationService {
         }
     }
 
+    public Boolean bfRm(String key) {
+        try {
+            return clusterClient.bfRm(key);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_BF_RM", e);
+        }
+    }
+
+    public Boolean bfRs(String key) {
+        try {
+            return clusterClient.bfRs(key);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_BF_RS", e);
+        }
+    }
+
     public String zScore(String key, String member) {
         try {
             return clusterClient.zScore(key, member);
@@ -151,6 +167,46 @@ public class IntegrationService {
             return clusterClient.zGetByPosition(key, position);
         } catch (Exception e) {
             throw new IntegrationException("ERR_Z_POS", e);
+        }
+    }
+
+    public String geoAdd(String key, String member, Double lat, Double lon) {
+        try {
+            return clusterClient.geoAdd(key, member, lat, lon);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_GEO_ADD", e);
+        }
+    }
+
+    public String geoSearch(String key, Double centerLat, Double centerLon, Double radiusMeters) {
+        try {
+            return clusterClient.geoSearch(key, centerLat, centerLon, radiusMeters);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_GEO_SEARCH", e);
+        }
+    }
+
+    public String geoDist(String key, String member1, String member2) {
+        try {
+            return clusterClient.geoDist(key, member1, member2);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_GEO_DIST", e);
+        }
+    }
+
+    public Boolean geoDel(String key) {
+        try {
+            return clusterClient.geoDel(key);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_GEO_DEL", e);
+        }
+    }
+
+    public Boolean geoRm(String key, String member) {
+        try {
+            return clusterClient.geoRm(key, member);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_GEO_RM", e);
         }
     }
 }

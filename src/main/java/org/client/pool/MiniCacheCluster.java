@@ -190,6 +190,22 @@ public class MiniCacheCluster implements AutoCloseable {
         return doExecute(c -> c.bfAdd(key, value), true);
     }
 
+    public boolean bfRm(String key) throws IOException {
+        String res = doExecute(c -> c.bfRm(key)
+                        ? Constant.IResponse.SUCCESS
+                        : Constant.IResponse.FAILURE,
+                true);
+        return Constant.IResponse.SUCCESS.equals(res);
+    }
+
+    public boolean bfRs(String key) throws IOException {
+        String res = doExecute(c -> c.bfRs(key)
+                        ? Constant.IResponse.SUCCESS
+                        : Constant.IResponse.FAILURE,
+                true);
+        return Constant.IResponse.SUCCESS.equals(res);
+    }
+
     public boolean bfExist(String key, String value) throws IOException {
         String res = doExecute(c -> c.bfExist(key, value)
                         ? Constant.IResponse.SUCCESS
@@ -240,6 +256,34 @@ public class MiniCacheCluster implements AutoCloseable {
 
     public Boolean zIncrBy(String key, Double increment, String member) throws IOException {
         var res = doExecute(c -> c.zIncrBy(key, increment, member)
+                        ? Constant.IResponse.SUCCESS
+                        : Constant.IResponse.FAILURE,
+                true);
+        return Constant.IResponse.SUCCESS.equals(res);
+    }
+
+    public String geoAdd(String key, String member, Double lat, Double lon) throws IOException {
+        return doExecute(c -> c.geoAdd(key, member, lat, lon), true);
+    }
+
+    public String geoSearch(String key, Double centerLat, Double centerLon, Double radiusMeters) throws IOException {
+        return doExecute(c -> c.geoSearch(key, centerLat, centerLon, radiusMeters), false);
+    }
+
+    public String geoDist(String key, String member1, String member2) throws IOException {
+        return doExecute(c -> c.geoDist(key, member1, member2), false);
+    }
+
+    public Boolean geoDel(String key) throws IOException {
+        var res = doExecute(c -> c.geoDel(key)
+                        ? Constant.IResponse.SUCCESS
+                        : Constant.IResponse.FAILURE,
+                true);
+        return Constant.IResponse.SUCCESS.equals(res);
+    }
+
+    public Boolean geoRm(String key, String member) throws IOException {
+        var res = doExecute(c -> c.geoRm(key, member)
                         ? Constant.IResponse.SUCCESS
                         : Constant.IResponse.FAILURE,
                 true);
