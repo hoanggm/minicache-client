@@ -154,6 +154,14 @@ public class IntegrationService {
         }
     }
 
+    public String zTop(String key, Integer top) {
+        try {
+            return clusterClient.zTop(key, top);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_Z_TOP", e);
+        }
+    }
+
     public Boolean zIncrBy(String key, Double increment, String member) {
         try {
             return clusterClient.zIncrBy(key, increment, member);
@@ -178,9 +186,9 @@ public class IntegrationService {
         }
     }
 
-    public String geoSearch(String key, Double centerLat, Double centerLon, Double radiusMeters) {
+    public String geoSearch(String key, Double centerLat, Double centerLon, Double radiusMeters, Integer limit) {
         try {
-            return clusterClient.geoSearch(key, centerLat, centerLon, radiusMeters);
+            return clusterClient.geoSearch(key, centerLat, centerLon, radiusMeters, limit);
         } catch (Exception e) {
             throw new IntegrationException("ERR_GEO_SEARCH", e);
         }
@@ -207,6 +215,38 @@ public class IntegrationService {
             return clusterClient.geoRm(key, member);
         } catch (Exception e) {
             throw new IntegrationException("ERR_GEO_RM", e);
+        }
+    }
+
+    public String geoGet(String key, String member) {
+        try {
+            return clusterClient.geoGet(key, member);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_GEO_GET", e);
+        }
+    }
+
+    public String geoNb(String key, String member) {
+        try {
+            return clusterClient.geoNb(key, member);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_GEO_NB", e);
+        }
+    }
+
+    public Boolean geoExists(String key, String member) {
+        try {
+            return clusterClient.geoExists(key, member);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_GEO_EXISTS", e);
+        }
+    }
+
+    public String geoEncode(String key, String member) {
+        try {
+            return clusterClient.geoEncode(key, member);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_GEO_ENCODE", e);
         }
     }
 }

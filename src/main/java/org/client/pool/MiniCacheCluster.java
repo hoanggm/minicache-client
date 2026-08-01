@@ -254,6 +254,10 @@ public class MiniCacheCluster implements AutoCloseable {
         return doExecute(c -> c.zRangeByScore(key, minScore, maxScore), false);
     }
 
+    public String zTop(String key, Integer top) throws IOException {
+        return doExecute(c -> c.zTop(key, top), false);
+    }
+
     public Boolean zIncrBy(String key, Double increment, String member) throws IOException {
         var res = doExecute(c -> c.zIncrBy(key, increment, member)
                         ? Constant.IResponse.SUCCESS
@@ -266,8 +270,8 @@ public class MiniCacheCluster implements AutoCloseable {
         return doExecute(c -> c.geoAdd(key, member, lat, lon), true);
     }
 
-    public String geoSearch(String key, Double centerLat, Double centerLon, Double radiusMeters) throws IOException {
-        return doExecute(c -> c.geoSearch(key, centerLat, centerLon, radiusMeters), false);
+    public String geoSearch(String key, Double centerLat, Double centerLon, Double radiusMeters, Integer limit) throws IOException {
+        return doExecute(c -> c.geoSearch(key, centerLat, centerLon, radiusMeters, limit), false);
     }
 
     public String geoDist(String key, String member1, String member2) throws IOException {
@@ -288,6 +292,26 @@ public class MiniCacheCluster implements AutoCloseable {
                         : Constant.IResponse.FAILURE,
                 true);
         return Constant.IResponse.SUCCESS.equals(res);
+    }
+
+    public String geoGet(String key, String member) throws IOException {
+        return doExecute(c -> c.geoGet(key, member), false);
+    }
+
+    public String geoNb(String key, String member) throws IOException {
+        return doExecute(c -> c.geoNb(key, member), false);
+    }
+
+    public Boolean geoExists(String key, String member) throws IOException {
+        var res = doExecute(c -> c.geoExists(key, member)
+                        ? Constant.IResponse.SUCCESS
+                        : Constant.IResponse.FAILURE,
+                true);
+        return Constant.IResponse.SUCCESS.equals(res);
+    }
+
+    public String geoEncode(String key, String member) throws IOException {
+        return doExecute(c -> c.geoEncode(key, member), false);
     }
 
     @Override
