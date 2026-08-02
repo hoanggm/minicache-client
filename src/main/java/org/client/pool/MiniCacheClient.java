@@ -55,7 +55,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x03, key, value, "0", 0,
                 null, null, null, null,
                 null, null, null, null, null,
-                null, null, null, null, null, null);
+                null, null, null, null, null, null,
+                null);
         return handleServerResponse();
     }
 
@@ -64,7 +65,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x03, key, value, notExist ? "1" : "0", 0,
                 null, null, null, null,
                 null, null, null, null, null,
-                null, null, null, null, null, null);
+                null, null, null, null, null, null,
+                null);
         return handleServerResponse();
     }
 
@@ -73,7 +75,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x03, key, value, notExist ? "1" : "0", timeToLive,
                 null, null, null, null,
                 null, null, null, null, null,
-                null, null, null, null, null, null);
+                null, null, null, null, null, null,
+                null);
         return handleServerResponse();
     }
 
@@ -82,7 +85,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x02, key, null, "0", 0,
                 null, null, null, null,
                 null, null, null, null, null,
-                null, null, null, null, null, null);
+                null, null, null, null, null, null,
+                null);
         return handleServerResponse();
     }
 
@@ -91,7 +95,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x06, key, null, "0", 0,
                 null, null, null, null,
                 null, null, null, null, null,
-                null, null, null, null, null, null);
+                null, null, null, null, null, null,
+                null);
         return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
     }
 
@@ -100,7 +105,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x04, key, null, "0", 0,
                 null, null, null, null,
                 null, null, null, null, null,
-                null, null, null, null, null, null);
+                null, null, null, null, null, null,
+                null);
         return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
     }
 
@@ -109,7 +115,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x01, null, null, "0", 0,
                 null, null, null, null,
                 null, null, null, null, null,
-                null, null, null, null, null, null);
+                null, null, null, null, null, null,
+                null);
         return handleServerResponse();
     }
 
@@ -118,7 +125,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x08, key, null, "0", 0,
                 expectedElements, falsePositive, null, null,
                 null, null, null, null, null,
-                null, null, null, null, null, null);
+                null, null, null, null, null, null,
+                null);
         return handleServerResponse();
     }
 
@@ -127,7 +135,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x09, key, value, "0", 0,
                 null, null, null, null,
                 null, null, null, null, null,
-                null, null, null, null, null, null);
+                null, null, null, null, null, null,
+                null);
         return handleServerResponse();
     }
 
@@ -136,7 +145,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x10, key, value, "0", 0,
                 null, null, null, null,
                 null, null, null, null, null,
-                null, null, null, null, null, null);
+                null, null, null, null, null, null,
+                null);
         return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
     }
 
@@ -145,7 +155,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x11, key, null, "0", 0,
                 null, null, null, null,
                 null, null, null, null, null,
-                null, null, null, null, null, null);
+                null, null, null, null, null, null,
+                null);
         return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
     }
 
@@ -154,7 +165,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x12, key, null, "0", 0,
                 null, null, null, null,
                 null, null, null, null, null,
-                null, null, null, null, null, null);
+                null, null, null, null, null, null,
+                null);
         return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
     }
 
@@ -163,7 +175,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x21, key, null, "0", 0,
                 null, null, member, null,
                 null, null, null, null, null,
-                null, null, null, null, null, null);
+                null, null, null, null, null, null,
+                null);
         return handleServerResponse();
     }
 
@@ -172,7 +185,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x13, key, value, "0", 0,
                 null, null, member, null,
                 null, null, score, null, null,
-                null, null, null, null, null, null);
+                null, null, null, null, null, null,
+                null);
         return handleServerResponse();
     }
 
@@ -181,7 +195,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x19, key, null, "0", 0,
                 null, null, member, null,
                 null, null, null, null, null,
-                null, null, null, null, null, null);
+                null, null, null, null, null, null,
+                null);
         return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
     }
 
@@ -190,7 +205,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x20, key, null, "0", 0,
                 null, null, null, null,
                 null, null, null, null, null,
-                null, null, null, null, null, null);
+                null, null, null, null, null, null,
+                null);
         return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
     }
 
@@ -199,7 +215,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x16, key, null, "0", 0,
                 null, null, member, null,
                 null, null, null, null, null,
-                null, null, null, null, null, null);
+                null, null, null, null, null, null,
+                null);
         return handleServerResponse();
     }
 
@@ -208,7 +225,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x15, key, null, "0", 0,
                 null, null, null, null,
                 start, stop, null, null, null,
-                null, null, null, null, null, null);
+                null, null, null, null, null, null,
+                null);
         return handleServerResponse();
     }
 
@@ -217,7 +235,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x14, key, null, "0", 0,
                 null, null, null, position,
                 null, null, null, null, null,
-                null, null, null, null, null, null);
+                null, null, null, null, null, null,
+                null);
         return handleServerResponse();
     }
 
@@ -226,7 +245,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x17, key, null, "0", 0,
                 null, null, member, null,
                 null, null, increment, null, null,
-                null, null, null, null, null, null);
+                null, null, null, null, null, null,
+                null);
         return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
     }
 
@@ -235,7 +255,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x18, key, null, "0", 0,
                 null, null, null, null,
                 null, null, null, minScore, maxScore,
-                null, null, null, null, null, null);
+                null, null, null, null, null, null,
+                null);
         return handleServerResponse();
     }
 
@@ -244,7 +265,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x29, key, null, "0", 0,
                 null, null, null, null,
                 top, null, null, null, null,
-                null, null, null, null, null, null);
+                null, null, null, null, null, null,
+                null);
         return handleServerResponse();
     }
 
@@ -253,7 +275,7 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x22, key, null, "0", 0,
                 null, null, member, null,
                 null, null, null, null, null,
-                member, lat, lon, null, null, null);
+                member, lat, lon, null, null, null, null);
         return handleServerResponse();
     }
 
@@ -262,7 +284,7 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x23, key, null, "0", 0,
                 null, null, null, null,
                 null, null, null, null, null,
-                null, centerLat, centerLon, null, radiusMeters, limit);
+                null, centerLat, centerLon, null, radiusMeters, limit, null);
         return handleServerResponse();
     }
 
@@ -271,7 +293,7 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x24, key, null, "0", 0,
                 null, null, null, null,
                 null, null, null, null, null,
-                member1, null, null, member2, null, null);
+                member1, null, null, member2, null, null, null);
         return handleServerResponse();
     }
 
@@ -280,7 +302,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x25, key, null, "0", 0,
                 null, null, null, null,
                 null, null, null, null, null,
-                null, null, null, null, null, null);
+                null, null, null, null, null, null,
+                null);
         return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
     }
 
@@ -289,7 +312,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x26, key, null, "0", 0,
                 null, null, null, null,
                 null, null, null, null, null,
-                member, null, null, null, null, null);
+                member, null, null, null, null, null,
+                null);
         return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
     }
 
@@ -298,7 +322,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x27, key, null, "0", 0,
                 null, null, null, null,
                 null, null, null, null, null,
-                member, null, null, null, null, null);
+                member, null, null, null, null, null,
+                null);
         return handleServerResponse();
     }
 
@@ -307,7 +332,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x28, key, null, "0", 0,
                 null, null, null, null,
                 null, null, null, null, null,
-                member, null, null, null, null, null);
+                member, null, null, null, null, null,
+                null);
         return handleServerResponse();
     }
 
@@ -316,7 +342,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x30, key, null, "0", 0,
                 null, null, null, null,
                 null, null, null, null, null,
-                member, null, null, null, null, null);
+                member, null, null, null, null, null,
+                null);
         return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
     }
 
@@ -325,8 +352,59 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x31, key, null, "0", 0,
                 null, null, null, null,
                 null, null, null, null, null,
-                member, null, null, null, null, null);
+                member, null, null, null, null, null,
+                null);
         return handleServerResponse();
+    }
+
+    public String hSet(String key, String field, String value) throws IOException {
+        ensureConnected();
+        sendBinaryRequest((byte) 0x32, key, value, "0", 0,
+                null, null, null, null,
+                null, null, null, null, null,
+                null, null, null, null, null, null,
+                field);
+        return handleServerResponse();
+    }
+
+    public String hGet(String key, String field) throws IOException {
+        ensureConnected();
+        sendBinaryRequest((byte) 0x33, key, null, "0", 0,
+                null, null, null, null,
+                null, null, null, null, null,
+                null, null, null, null, null, null,
+                field);
+        return handleServerResponse();
+    }
+
+    public String hGetAll(String key) throws IOException {
+        ensureConnected();
+        sendBinaryRequest((byte) 0x34, key, null, "0", 0,
+                null, null, null, null,
+                null, null, null, null, null,
+                null, null, null, null, null, null,
+                null);
+        return handleServerResponse();
+    }
+
+    public boolean hRm(String key, String field) throws IOException {
+        ensureConnected();
+        sendBinaryRequest((byte) 0x35, key, null, "0", 0,
+                null, null, null, null,
+                null, null, null, null, null,
+                null, null, null, null, null, null,
+                field);
+        return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
+    }
+
+    public boolean hDel(String key) throws IOException {
+        ensureConnected();
+        sendBinaryRequest((byte) 0x36, key, null, "0", 0,
+                null, null, null, null,
+                null, null, null, null, null,
+                null, null, null, null, null, null,
+                null);
+        return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
     }
 
     private void ensureConnected() throws IOException {
@@ -350,7 +428,8 @@ public class MiniCacheClient implements AutoCloseable {
                 sendBinaryRequest((byte) 0x00, null, null, "0", 0,
                         null, null, null, null,
                         null, null, null, null, null,
-                        null, null, null, null, null, null);
+                        null, null, null, null, null, null,
+                        null);
             }
         } catch (Exception ignored) {
         }
@@ -369,7 +448,8 @@ public class MiniCacheClient implements AutoCloseable {
                                    Integer zsIdx, Integer zsStartIdx, Integer zsStopIdx,
                                    Double zsScore, Double zsStartScr, Double zsStopScr,
                                    String geoMem, Double geoLat, Double geoLon,
-                                   String geoMem2, Double geoRadius, Integer limit) throws IOException {
+                                   String geoMem2, Double geoRadius, Integer limit,
+                                   String hsField) throws IOException {
         try {
             byte[] keyBytes = (key != null) ? key.getBytes(StandardCharsets.UTF_8) : new byte[0];
             byte[] valueBytes = (value != null) ? value.getBytes(StandardCharsets.UTF_8) : new byte[0];
@@ -412,6 +492,7 @@ public class MiniCacheClient implements AutoCloseable {
             out.writeDouble(geoRadius != null ? geoRadius : 0d);
 
             out.writeInt(limit != null ? limit : 0);
+            out.writeUTF(hsField != null ? hsField : "");
 
             out.flush();
         } catch (IOException ex) {

@@ -314,6 +314,34 @@ public class MiniCacheCluster implements AutoCloseable {
         return doExecute(c -> c.geoEncode(key, member), false);
     }
 
+    public String hSet(String key, String field, String value) throws IOException {
+        return doExecute(c -> c.hSet(key, field, value), true);
+    }
+
+    public String hGet(String key, String field) throws IOException {
+        return doExecute(c -> c.hGet(key, field), false);
+    }
+
+    public String hGetAll(String key) throws IOException {
+        return doExecute(c -> c.hGetAll(key), false);
+    }
+
+    public Boolean hDel(String key) throws IOException {
+        var res = doExecute(c -> c.hDel(key)
+                        ? Constant.IResponse.SUCCESS
+                        : Constant.IResponse.FAILURE,
+                true);
+        return Constant.IResponse.SUCCESS.equals(res);
+    }
+
+    public Boolean hRm(String key, String field) throws IOException {
+        var res = doExecute(c -> c.hRm(key, field)
+                        ? Constant.IResponse.SUCCESS
+                        : Constant.IResponse.FAILURE,
+                true);
+        return Constant.IResponse.SUCCESS.equals(res);
+    }
+
     @Override
     public void close() {
         for (MiniCachePool pool : nodePools.values()) {

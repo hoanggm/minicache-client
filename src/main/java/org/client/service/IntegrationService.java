@@ -249,4 +249,44 @@ public class IntegrationService {
             throw new IntegrationException("ERR_GEO_ENCODE", e);
         }
     }
+
+    public String hSet(String key, String field, String value) {
+        try {
+            return clusterClient.hSet(key, field, value);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_H_SET", e);
+        }
+    }
+
+    public String hGet(String key, String field) {
+        try {
+            return clusterClient.hGet(key, field);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_H_GET", e);
+        }
+    }
+
+    public String hGetAll(String key) {
+        try {
+            return clusterClient.hGetAll(key);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_H_GET_ALL", e);
+        }
+    }
+
+    public Boolean hDel(String key) {
+        try {
+            return clusterClient.hDel(key);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_H_DEL", e);
+        }
+    }
+
+    public Boolean hRm(String key, String field) {
+        try {
+            return clusterClient.hRm(key, field);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_H_RM", e);
+        }
+    }
 }
