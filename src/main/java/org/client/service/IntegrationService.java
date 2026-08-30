@@ -22,7 +22,7 @@ public class IntegrationService {
         this.collapsingHandler = collapsingHandler;
     }
 
-    @ReadCommand
+    @ReadCommand(Command.GET)
     public String get(String key) {
         if (this.collapsingHandler != null) {
             return this.collapsingHandler.execute(
@@ -42,7 +42,7 @@ public class IntegrationService {
         }
     }
 
-    @WriteCommand
+    @WriteCommand(Command.PUT)
     public String set(String key, String value) {
         try {
             return clusterClient.set(key, value);
@@ -51,7 +51,7 @@ public class IntegrationService {
         }
     }
 
-    @WriteCommand
+    @WriteCommand(Command.PUT)
     public String set(String key, String value, Boolean notExist) {
         try {
             return clusterClient.set(key, value, notExist);
@@ -60,7 +60,7 @@ public class IntegrationService {
         }
     }
 
-    @WriteCommand
+    @WriteCommand(Command.PUT)
     public String set(String key, String value, Boolean notExist, Integer timeToLive) {
         try {
             return clusterClient.set(key, value, notExist, timeToLive);
@@ -69,7 +69,7 @@ public class IntegrationService {
         }
     }
 
-    @WriteCommand
+    @WriteCommand(Command.DELETE)
     public Boolean del(String key) {
         try {
             return clusterClient.del(key);
@@ -78,7 +78,7 @@ public class IntegrationService {
         }
     }
 
-    @ReadCommand
+    @ReadCommand(Command.EXISTS)
     public Boolean exists(String key) {
         if (this.collapsingHandler != null) {
             var result = this.collapsingHandler.execute(
@@ -99,7 +99,7 @@ public class IntegrationService {
         }
     }
 
-    @ReadCommand
+    @ReadCommand(Command.BF_EXISTS)
     public Boolean bfExists(String key, String value) {
         if (this.collapsingHandler != null) {
             var result = this.collapsingHandler.execute(
@@ -120,7 +120,7 @@ public class IntegrationService {
         }
     }
 
-    @WriteCommand
+    @WriteCommand(Command.BF_INIT)
     public String bfInit(String key, Integer expectedElements, Double falsePositive) {
         try {
             return clusterClient.bfInit(key, expectedElements, falsePositive);
@@ -129,7 +129,7 @@ public class IntegrationService {
         }
     }
 
-    @WriteCommand
+    @WriteCommand(Command.BF_ADD)
     public String bfAdd(String key, String value) {
         try {
             return clusterClient.bfAdd(key, value);
@@ -138,7 +138,7 @@ public class IntegrationService {
         }
     }
 
-    @WriteCommand
+    @WriteCommand(Command.BF_RM)
     public Boolean bfRm(String key) {
         try {
             return clusterClient.bfRm(key);
@@ -147,7 +147,7 @@ public class IntegrationService {
         }
     }
 
-    @WriteCommand
+    @WriteCommand(Command.BF_RS)
     public Boolean bfRs(String key) {
         try {
             return clusterClient.bfRs(key);
@@ -156,7 +156,7 @@ public class IntegrationService {
         }
     }
 
-    @ReadCommand
+    @ReadCommand(Command.Z_SCR)
     public String zScore(String key, String member) {
         if (this.collapsingHandler != null) {
             return this.collapsingHandler.execute(
@@ -176,7 +176,7 @@ public class IntegrationService {
         }
     }
 
-    @WriteCommand
+    @WriteCommand(Command.Z_ADD)
     public String zAdd(String key, Double score, String member, String value) {
         try {
             return clusterClient.zAdd(key, score, member, value);
@@ -185,7 +185,7 @@ public class IntegrationService {
         }
     }
 
-    @WriteCommand
+    @WriteCommand(Command.Z_RM)
     public Boolean zRem(String key, String member) {
         try {
             return clusterClient.zRem(key, member);
@@ -194,7 +194,7 @@ public class IntegrationService {
         }
     }
 
-    @WriteCommand
+    @WriteCommand(Command.Z_DEL)
     public Boolean zDel(String key) {
         try {
             return clusterClient.zDel(key);
@@ -203,7 +203,7 @@ public class IntegrationService {
         }
     }
 
-    @ReadCommand
+    @ReadCommand(Command.Z_RANK)
     public String zRank(String key, String member) {
         if (this.collapsingHandler != null) {
             return this.collapsingHandler.execute(
@@ -223,7 +223,7 @@ public class IntegrationService {
         }
     }
 
-    @ReadCommand
+    @ReadCommand(Command.Z_RANGE)
     public String zRangeByPositions(String key, Integer start, Integer stop) {
         if (this.collapsingHandler != null) {
             return this.collapsingHandler.execute(
@@ -243,7 +243,7 @@ public class IntegrationService {
         }
     }
 
-    @ReadCommand
+    @ReadCommand(Command.Z_RSCR)
     public String zRangeByScore(String key, Double minScore, Double maxScore) {
         if (this.collapsingHandler != null) {
             return this.collapsingHandler.execute(
@@ -263,7 +263,7 @@ public class IntegrationService {
         }
     }
 
-    @ReadCommand
+    @ReadCommand(Command.Z_TOP)
     public String zTop(String key, Integer top) {
         if (this.collapsingHandler != null) {
             return this.collapsingHandler.execute(
@@ -283,7 +283,7 @@ public class IntegrationService {
         }
     }
 
-    @WriteCommand
+    @WriteCommand(Command.Z_INCR)
     public Boolean zIncrBy(String key, Double increment, String member) {
         try {
             return clusterClient.zIncrBy(key, increment, member);
@@ -292,7 +292,7 @@ public class IntegrationService {
         }
     }
 
-    @ReadCommand
+    @ReadCommand(Command.Z_POS)
     public String zGetByPosition(String key, Integer position) {
         if (this.collapsingHandler != null) {
             return this.collapsingHandler.execute(
@@ -312,7 +312,7 @@ public class IntegrationService {
         }
     }
 
-    @WriteCommand
+    @WriteCommand(Command.GEO_ADD)
     public String geoAdd(String key, String member, Double lat, Double lon) {
         try {
             return clusterClient.geoAdd(key, member, lat, lon);
@@ -321,7 +321,7 @@ public class IntegrationService {
         }
     }
 
-    @ReadCommand
+    @ReadCommand(Command.GEO_SEARCH)
     public String geoSearch(String key, Double centerLat, Double centerLon, Double radiusMeters, Integer limit) {
         if (this.collapsingHandler != null) {
             return this.collapsingHandler.execute(
@@ -341,7 +341,7 @@ public class IntegrationService {
         }
     }
 
-    @ReadCommand
+    @ReadCommand(Command.GEO_DIST)
     public String geoDist(String key, String member1, String member2) {
         if (this.collapsingHandler != null) {
             return this.collapsingHandler.execute(
@@ -361,7 +361,7 @@ public class IntegrationService {
         }
     }
 
-    @WriteCommand
+    @WriteCommand(Command.GEO_DEL)
     public Boolean geoDel(String key) {
         try {
             return clusterClient.geoDel(key);
@@ -370,7 +370,7 @@ public class IntegrationService {
         }
     }
 
-    @WriteCommand
+    @WriteCommand(Command.GEO_RM)
     public Boolean geoRm(String key, String member) {
         try {
             return clusterClient.geoRm(key, member);
@@ -379,7 +379,7 @@ public class IntegrationService {
         }
     }
 
-    @ReadCommand
+    @ReadCommand(Command.GEO_GET)
     public String geoGet(String key, String member) {
         if (this.collapsingHandler != null) {
             return this.collapsingHandler.execute(
@@ -399,7 +399,7 @@ public class IntegrationService {
         }
     }
 
-    @ReadCommand
+    @ReadCommand(Command.GEO_NB)
     public String geoNb(String key, String member) {
         if (this.collapsingHandler != null) {
             return this.collapsingHandler.execute(
@@ -419,7 +419,7 @@ public class IntegrationService {
         }
     }
 
-    @ReadCommand
+    @ReadCommand(Command.GEO_EXISTS)
     public Boolean geoExists(String key, String member) {
         if (this.collapsingHandler != null) {
             var result = this.collapsingHandler.execute(
@@ -440,7 +440,7 @@ public class IntegrationService {
         }
     }
 
-    @ReadCommand
+    @ReadCommand(Command.GEO_ENCODE)
     public String geoEncode(String key, String member) {
         if (this.collapsingHandler != null) {
             return this.collapsingHandler.execute(
@@ -460,7 +460,7 @@ public class IntegrationService {
         }
     }
 
-    @WriteCommand
+    @WriteCommand(Command.H_SET)
     public String hSet(String key, String field, String value) {
         try {
             return clusterClient.hSet(key, field, value);
@@ -469,7 +469,7 @@ public class IntegrationService {
         }
     }
 
-    @ReadCommand
+    @ReadCommand(Command.H_GET)
     public String hGet(String key, String field) {
         if (this.collapsingHandler != null) {
             return this.collapsingHandler.execute(
@@ -489,7 +489,7 @@ public class IntegrationService {
         }
     }
 
-    @ReadCommand
+    @ReadCommand(Command.H_ALL)
     public String hGetAll(String key) {
         if (this.collapsingHandler != null) {
             return this.collapsingHandler.execute(
@@ -509,7 +509,7 @@ public class IntegrationService {
         }
     }
 
-    @WriteCommand
+    @WriteCommand(Command.H_DEL)
     public Boolean hDel(String key) {
         try {
             return clusterClient.hDel(key);
@@ -518,12 +518,169 @@ public class IntegrationService {
         }
     }
 
-    @WriteCommand
+    @WriteCommand(Command.H_RM)
     public Boolean hRm(String key, String field) {
         try {
             return clusterClient.hRm(key, field);
         } catch (Exception e) {
             throw new IntegrationException("ERR_H_RM", e);
+        }
+    }
+
+    @WriteCommand(Command.FZ_DEL)
+    public Boolean fzDel(String key) {
+        try {
+            return clusterClient.fzDel(key);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_FZ_DEL", e);
+        }
+    }
+
+    @WriteCommand(Command.FZ_RM)
+    public Boolean fzRm(String key, String word) {
+        try {
+            return clusterClient.fzRm(key, word);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_FZ_RM", e);
+        }
+    }
+
+    @WriteCommand(Command.FZ_ADD)
+    public String fzAdd(String key, String word, Long frequency) {
+        try {
+            return clusterClient.fzAdd(key, word, frequency);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_FZ_ADD", e);
+        }
+    }
+
+    @WriteCommand(Command.FZ_INCR)
+    public Boolean fzIncr(String key, String word, Long incr) {
+        try {
+            return clusterClient.fzIncr(key, word, incr);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_FZ_INCR", e);
+        }
+    }
+
+    @ReadCommand(Command.FZ_SEARCH)
+    public String fzSearch(String key, String query, Integer limit) {
+        if (this.collapsingHandler != null) {
+            return this.collapsingHandler.execute(
+                    String.format("%s:%s:%s:%d", Command.FZ_SEARCH.name(), key, query, limit),
+                    () -> this.doFzSearch(key, query, limit)
+            );
+        } else {
+            return this.doFzSearch(key, query, limit);
+        }
+    }
+
+    private String doFzSearch(String key, String query, Integer limit) {
+        try {
+            return clusterClient.fzSearch(key, query, limit);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_FZ_SEARCH", e);
+        }
+    }
+
+    @ReadCommand(Command.FZ_SUGGEST)
+    public String fzSuggest(String key, String query, Integer limit, Integer maxDist) {
+        if (this.collapsingHandler != null) {
+            return this.collapsingHandler.execute(
+                    String.format("%s:%s:%s:%d:%d", Command.FZ_SUGGEST.name(), key, query, limit, maxDist),
+                    () -> this.doFzSuggest(key, query, limit, maxDist)
+            );
+        } else {
+            return this.doFzSuggest(key, query, limit, maxDist);
+        }
+    }
+
+    private String doFzSuggest(String key, String query, Integer limit, Integer maxDist) {
+        try {
+            return clusterClient.fzSuggest(key, query, limit, maxDist);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_FZ_SUGGEST", e);
+        }
+    }
+
+    @ReadCommand(Command.FZ_EXACT)
+    public String fzGetExact(String key, String word) {
+        if (this.collapsingHandler != null) {
+            return this.collapsingHandler.execute(
+                    String.format("%s:%s:%s", Command.FZ_EXACT.name(), key, word),
+                    () -> this.doFzGetExact(key, word)
+            );
+        } else {
+            return this.doFzGetExact(key, word);
+        }
+    }
+
+    private String doFzGetExact(String key, String word) {
+        try {
+            return clusterClient.fzGetExact(key, word);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_FZ_EXACT", e);
+        }
+    }
+
+    @ReadCommand(Command.FZ_RANDOM)
+    public String fzRandom(String key, Integer limit) {
+        if (this.collapsingHandler != null) {
+            return this.collapsingHandler.execute(
+                    String.format("%s:%s:%d", Command.FZ_RANDOM.name(), key, limit),
+                    () -> this.doFzRandom(key, limit)
+            );
+        } else {
+            return this.doFzRandom(key, limit);
+        }
+    }
+
+    private String doFzRandom(String key, Integer limit) {
+        try {
+            return clusterClient.fzRandom(key, limit);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_FZ_RANDOM", e);
+        }
+    }
+
+    @ReadCommand(Command.FZ_PHONETIC)
+    public String fzPhonetic(String key, String input, Integer limit) {
+        if (this.collapsingHandler != null) {
+            return this.collapsingHandler.execute(
+                    String.format("%s:%s:%s:%d", Command.FZ_PHONETIC.name(), key, input, limit),
+                    () -> this.doFzPhonetic(key, input, limit)
+            );
+        } else {
+            return this.doFzPhonetic(key, input, limit);
+        }
+    }
+
+    private String doFzPhonetic(String key, String input, Integer limit) {
+        try {
+            return clusterClient.fzPhonetic(key, input, limit);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_FZ_PHONETIC", e);
+        }
+    }
+
+    @ReadCommand(Command.FZ_EXISTS)
+    public Boolean fzExists(String key, String word) {
+        if (this.collapsingHandler != null) {
+            var result = this.collapsingHandler.execute(
+                    String.format("%s:%s:%s", Command.FZ_EXISTS.name(), key, word),
+                    () -> String.valueOf(this.doFzExists(key, word))
+            );
+            return Boolean.valueOf(result);
+        } else {
+            return this.doFzExists(key, word);
+        }
+    }
+
+    private Boolean doFzExists(String key, String word) {
+        try {
+            return clusterClient.fzExists(key, word);
+        } catch (Exception e) {
+            throw new IntegrationException("ERR_FZ_EXISTS", e);
         }
     }
 }

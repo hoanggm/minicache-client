@@ -56,7 +56,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 null, null, null, null, null,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return handleServerResponse();
     }
 
@@ -66,7 +66,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 null, null, null, null, null,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return handleServerResponse();
     }
 
@@ -76,7 +76,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 null, null, null, null, null,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return handleServerResponse();
     }
 
@@ -86,7 +86,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 null, null, null, null, null,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return handleServerResponse();
     }
 
@@ -96,7 +96,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 null, null, null, null, null,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
     }
 
@@ -106,7 +106,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 null, null, null, null, null,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
     }
 
@@ -116,7 +116,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 null, null, null, null, null,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return handleServerResponse();
     }
 
@@ -126,7 +126,7 @@ public class MiniCacheClient implements AutoCloseable {
                 expectedElements, falsePositive, null, null,
                 null, null, null, null, null,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return handleServerResponse();
     }
 
@@ -136,7 +136,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 null, null, null, null, null,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return handleServerResponse();
     }
 
@@ -146,7 +146,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 null, null, null, null, null,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
     }
 
@@ -156,7 +156,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 null, null, null, null, null,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
     }
 
@@ -166,7 +166,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 null, null, null, null, null,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
     }
 
@@ -176,7 +176,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, member, null,
                 null, null, null, null, null,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return handleServerResponse();
     }
 
@@ -186,7 +186,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, member, null,
                 null, null, score, null, null,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return handleServerResponse();
     }
 
@@ -196,7 +196,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, member, null,
                 null, null, null, null, null,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
     }
 
@@ -206,7 +206,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 null, null, null, null, null,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
     }
 
@@ -216,7 +216,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, member, null,
                 null, null, null, null, null,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return handleServerResponse();
     }
 
@@ -226,7 +226,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 start, stop, null, null, null,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return handleServerResponse();
     }
 
@@ -236,7 +236,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, position,
                 null, null, null, null, null,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return handleServerResponse();
     }
 
@@ -246,7 +246,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, member, null,
                 null, null, increment, null, null,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
     }
 
@@ -256,7 +256,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 null, null, null, minScore, maxScore,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return handleServerResponse();
     }
 
@@ -266,7 +266,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 top, null, null, null, null,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return handleServerResponse();
     }
 
@@ -275,7 +275,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x22, key, null, "0", 0,
                 null, null, member, null,
                 null, null, null, null, null,
-                member, lat, lon, null, null, null, null);
+                member, lat, lon, null, null, null, null,
+                null, null);
         return handleServerResponse();
     }
 
@@ -284,7 +285,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x23, key, null, "0", 0,
                 null, null, null, null,
                 null, null, null, null, null,
-                null, centerLat, centerLon, null, radiusMeters, limit, null);
+                null, centerLat, centerLon, null, radiusMeters, limit,
+                null, null, null);
         return handleServerResponse();
     }
 
@@ -293,7 +295,8 @@ public class MiniCacheClient implements AutoCloseable {
         sendBinaryRequest((byte) 0x24, key, null, "0", 0,
                 null, null, null, null,
                 null, null, null, null, null,
-                member1, null, null, member2, null, null, null);
+                member1, null, null, member2, null, null,
+                null, null, null);
         return handleServerResponse();
     }
 
@@ -303,7 +306,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 null, null, null, null, null,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
     }
 
@@ -313,7 +316,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 null, null, null, null, null,
                 member, null, null, null, null, null,
-                null);
+                null, null, null);
         return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
     }
 
@@ -323,7 +326,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 null, null, null, null, null,
                 member, null, null, null, null, null,
-                null);
+                null, null, null);
         return handleServerResponse();
     }
 
@@ -333,7 +336,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 null, null, null, null, null,
                 member, null, null, null, null, null,
-                null);
+                null, null, null);
         return handleServerResponse();
     }
 
@@ -343,7 +346,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 null, null, null, null, null,
                 member, null, null, null, null, null,
-                null);
+                null, null, null);
         return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
     }
 
@@ -353,7 +356,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 null, null, null, null, null,
                 member, null, null, null, null, null,
-                null);
+                null, null, null);
         return handleServerResponse();
     }
 
@@ -363,7 +366,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 null, null, null, null, null,
                 null, null, null, null, null, null,
-                field);
+                field, null, null);
         return handleServerResponse();
     }
 
@@ -373,7 +376,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 null, null, null, null, null,
                 null, null, null, null, null, null,
-                field);
+                field, null, null);
         return handleServerResponse();
     }
 
@@ -383,7 +386,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 null, null, null, null, null,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return handleServerResponse();
     }
 
@@ -393,7 +396,7 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 null, null, null, null, null,
                 null, null, null, null, null, null,
-                field);
+                field, null, null);
         return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
     }
 
@@ -403,8 +406,108 @@ public class MiniCacheClient implements AutoCloseable {
                 null, null, null, null,
                 null, null, null, null, null,
                 null, null, null, null, null, null,
-                null);
+                null, null, null);
         return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
+    }
+
+    public String fzSearch(String key, String query, Integer limit) throws IOException {
+        ensureConnected();
+        sendBinaryRequest((byte) 0x38, key, query, "0", 0,
+                null, null, null, null,
+                null, null, null, null, null,
+                null, null, null, null, null, limit,
+                null, null, null);
+        return handleServerResponse();
+    }
+
+    public String fzAdd(String key, String word, Long frequency) throws IOException {
+        ensureConnected();
+        sendBinaryRequest((byte) 0x37, key, word, "0", 0,
+                null, null, null, null,
+                null, null, null, null, null,
+                null, null, null, null, null, null,
+                null, frequency, null);
+        return handleServerResponse();
+    }
+
+    public String fzSuggest(String key, String query, Integer limit, Integer maxDist) throws IOException {
+        ensureConnected();
+        sendBinaryRequest((byte) 0x39, key, query, "0", 0,
+                null, null, null, null,
+                null, null, null, null, null,
+                null, null, null, null, null, limit,
+                null, null, maxDist);
+        return handleServerResponse();
+    }
+
+    public String fzGetExact(String key, String word) throws IOException {
+        ensureConnected();
+        sendBinaryRequest((byte) 0x42, key, word, "0", 0,
+                null, null, null, null,
+                null, null, null, null, null,
+                null, null, null, null, null, null,
+                null, null, null);
+        return handleServerResponse();
+    }
+
+    public boolean fzDel(String key) throws IOException {
+        ensureConnected();
+        sendBinaryRequest((byte) 0x40, key, null, "0", 0,
+                null, null, null, null,
+                null, null, null, null, null,
+                null, null, null, null, null, null,
+                null, null, null);
+        return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
+    }
+
+    public boolean fzRm(String key, String word) throws IOException {
+        ensureConnected();
+        sendBinaryRequest((byte) 0x41, key, word, "0", 0,
+                null, null, null, null,
+                null, null, null, null, null,
+                null, null, null, null, null, null,
+                null, null, null);
+        return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
+    }
+
+    public boolean fzExists(String key, String word) throws IOException {
+        ensureConnected();
+        sendBinaryRequest((byte) 0x43, key, word, "0", 0,
+                null, null, null, null,
+                null, null, null, null, null,
+                null, null, null, null, null, null,
+                null, null, null);
+        return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
+    }
+
+    public boolean fzIncr(String key, String word, Long incr) throws IOException {
+        ensureConnected();
+        sendBinaryRequest((byte) 0x44, key, word, "0", 0,
+                null, null, null, null,
+                null, null, null, null, null,
+                null, null, null, null, null, null,
+                null, incr, null);
+        return Constant.IResponse.SUCCESS.equalsIgnoreCase(handleServerResponse());
+    }
+
+    public String fzPhonetic(String key, String input, Integer limit) throws IOException {
+        ensureConnected();
+        sendBinaryRequest((byte) 0x45, key, input, "0", 0,
+                null, null, null, null,
+                null, null, null, null, null,
+                null, null, null, null, null, limit,
+                null, null, null);
+        return handleServerResponse();
+    }
+
+    public String fzRandom(String key, Integer limit) throws IOException {
+        ensureConnected();
+        sendBinaryRequest((byte) 0x46, key, null, "0", 0,
+                null, null, null, null,
+                null, null, null, null, null,
+                null, null, null, null, null, limit,
+                null, null, null);
+        return handleServerResponse();
     }
 
     private void ensureConnected() throws IOException {
@@ -429,7 +532,7 @@ public class MiniCacheClient implements AutoCloseable {
                         null, null, null, null,
                         null, null, null, null, null,
                         null, null, null, null, null, null,
-                        null);
+                        null, null, null);
             }
         } catch (Exception ignored) {
         }
@@ -449,7 +552,7 @@ public class MiniCacheClient implements AutoCloseable {
                                    Double zsScore, Double zsStartScr, Double zsStopScr,
                                    String geoMem, Double geoLat, Double geoLon,
                                    String geoMem2, Double geoRadius, Integer limit,
-                                   String hsField) throws IOException {
+                                   String hsField, Long fzFreq, Integer maxEditDist) throws IOException {
         try {
             byte[] keyBytes = (key != null) ? key.getBytes(StandardCharsets.UTF_8) : new byte[0];
             byte[] valueBytes = (value != null) ? value.getBytes(StandardCharsets.UTF_8) : new byte[0];
@@ -493,6 +596,9 @@ public class MiniCacheClient implements AutoCloseable {
 
             out.writeInt(limit != null ? limit : 0);
             out.writeUTF(hsField != null ? hsField : "");
+
+            out.writeLong(fzFreq != null ? fzFreq : 0L);
+            out.writeInt(maxEditDist != null ? maxEditDist : 0);
 
             out.flush();
         } catch (IOException ex) {

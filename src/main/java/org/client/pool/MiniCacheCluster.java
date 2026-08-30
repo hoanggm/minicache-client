@@ -342,6 +342,62 @@ public class MiniCacheCluster implements AutoCloseable {
         return Constant.IResponse.SUCCESS.equals(res);
     }
 
+    public Boolean fzDel(String key) throws IOException {
+        var res = doExecute(c -> c.fzDel(key)
+                        ? Constant.IResponse.SUCCESS
+                        : Constant.IResponse.FAILURE,
+                true);
+        return Constant.IResponse.SUCCESS.equals(res);
+    }
+
+    public Boolean fzRm(String key, String word) throws IOException {
+        var res = doExecute(c -> c.fzRm(key, word)
+                        ? Constant.IResponse.SUCCESS
+                        : Constant.IResponse.FAILURE,
+                true);
+        return Constant.IResponse.SUCCESS.equals(res);
+    }
+
+    public String fzAdd(String key, String word, Long frequency) throws IOException {
+        return doExecute(c -> c.fzAdd(key, word, frequency), true);
+    }
+
+    public String fzSearch(String key, String query, Integer limit) throws IOException {
+        return doExecute(c -> c.fzSearch(key, query, limit), false);
+    }
+
+    public String fzSuggest(String key, String query, Integer limit, Integer maxDist) throws IOException {
+        return doExecute(c -> c.fzSuggest(key, query, limit, maxDist), false);
+    }
+
+    public String fzGetExact(String key, String word) throws IOException {
+        return doExecute(c -> c.fzGetExact(key, word), false);
+    }
+
+    public String fzRandom(String key, Integer limit) throws IOException {
+        return doExecute(c -> c.fzRandom(key, limit), false);
+    }
+
+    public String fzPhonetic(String key, String input, Integer limit) throws IOException {
+        return doExecute(c -> c.fzPhonetic(key, input, limit), false);
+    }
+
+    public Boolean fzIncr(String key, String word, Long incr) throws IOException {
+        var res = doExecute(c -> c.fzIncr(key, word, incr)
+                        ? Constant.IResponse.SUCCESS
+                        : Constant.IResponse.FAILURE,
+                true);
+        return Constant.IResponse.SUCCESS.equals(res);
+    }
+
+    public Boolean fzExists(String key, String word) throws IOException {
+        var res = doExecute(c -> c.fzExists(key, word)
+                        ? Constant.IResponse.SUCCESS
+                        : Constant.IResponse.FAILURE,
+                false);
+        return Constant.IResponse.SUCCESS.equals(res);
+    }
+
     @Override
     public void close() {
         for (MiniCachePool pool : nodePools.values()) {
