@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 public class MiniCacheClient implements AutoCloseable {
     private static final byte MAGIC_BYTE = 0x4D;
@@ -20,6 +21,8 @@ public class MiniCacheClient implements AutoCloseable {
     private final int clientConnectTimeout;
     private final int clientReadTimeout;
     private final int bufferSize;
+    private String username;
+    private String password;
 
     public MiniCacheClient(String host, int port,
                            int clientConnectTimeout, int clientReadTimeout,
@@ -30,6 +33,20 @@ public class MiniCacheClient implements AutoCloseable {
         this.clientConnectTimeout = clientConnectTimeout;
         this.clientReadTimeout = clientReadTimeout;
         this.bufferSize = bufferSize;
+    }
+
+    public MiniCacheClient(String host, int port,
+                           int clientConnectTimeout, int clientReadTimeout,
+                           int bufferSize, MiniCachePool pool,
+                           String username, String password) {
+        this.host = host;
+        this.port = port;
+        this.pool = pool;
+        this.clientConnectTimeout = clientConnectTimeout;
+        this.clientReadTimeout = clientReadTimeout;
+        this.bufferSize = bufferSize;
+        this.username = username;
+        this.password = password;
     }
 
     public void connect() throws IOException {
@@ -48,6 +65,9 @@ public class MiniCacheClient implements AutoCloseable {
         this.out = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream(), bufferSize));
         this.in = new DataInputStream(new BufferedInputStream(socket.getInputStream(), bufferSize));
         this.isConnected = true;
+        if (this.username != null && this.password != null) {
+            authenticate(this.username, this.password);
+        }
     }
 
     public String set(String key, String value) throws IOException {
@@ -599,6 +619,7 @@ public class MiniCacheClient implements AutoCloseable {
 
             out.writeLong(fzFreq != null ? fzFreq : 0L);
             out.writeInt(maxEditDist != null ? maxEditDist : 0);
+            out.writeBoolean(false);
 
             out.flush();
         } catch (IOException ex) {
@@ -641,5 +662,37 @@ public class MiniCacheClient implements AutoCloseable {
             case (byte) 0xFF -> throw new RuntimeException("Server Error: " + resultString);
             default -> throw new IOException("Unknown status: " + status);
         };
+    }
+
+    private void authenticate(String username, String password) throws IOException {
+        ensureConnected();
+
+        String raw = username + ":" + password;
+        String authCode = Base64.getEncoder().encodeToString(raw.getBytes(StandardCharsets.UTF_8));
+
+        sendBinaryRequest((byte) 0x47, null, authCode, "0", 0,
+                null, null, null, null,
+                null, null, null, null, null,
+                null, null, null, null, null, null,
+                null, null, null);
+
+        handleServerAuthResponse();
+    }
+
+    private void handleServerAuthResponse() throws IOException {
+        byte magic = in.readByte();
+        if (magic != MAGIC_BYTE) {
+            throw new IOException("Protocol corruption");
+        }
+        in.readByte();
+        int dataLength = in.readInt();
+
+        byte[] dataBytes = new byte[dataLength];
+        if (dataLength > 0) in.readFully(dataBytes);
+        String resultString = new String(dataBytes, StandardCharsets.UTF_8);
+
+        if (!resultString.equalsIgnoreCase("OK")) {
+            throw new RuntimeException("Authenticated fail");
+        }
     }
 }

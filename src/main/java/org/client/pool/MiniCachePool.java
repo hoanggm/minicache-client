@@ -44,6 +44,35 @@ public class MiniCachePool implements AutoCloseable {
         }
     }
 
+    public MiniCachePool(String host, int port, int coreConnections, int maxConnections,
+                         int queuingTime, int clientConnectTimeout, int clientReadTimeout,
+                         int bufferSize, String username, String password) {
+        this.host = host;
+        this.port = port;
+        this.maxConnections = maxConnections;
+        this.pool = new LinkedBlockingQueue<>(maxConnections);
+        this.currentConnections = new AtomicInteger(0);
+        this.queuingTime = queuingTime;
+        this.clientConnectTimeout = clientConnectTimeout;
+        this.clientReadTimeout = clientReadTimeout;
+        this.clientDataBufferSize = bufferSize;
+
+        for (int i = 0; i < coreConnections; i++) {
+            try {
+                MiniCacheClient client = new MiniCacheClient(host, port,
+                        clientConnectTimeout, clientReadTimeout, bufferSize, this,
+                        username, password);
+                client.connect();
+                if (pool.offer(client)) {
+                    currentConnections.incrementAndGet();
+                } else {
+                    client.destroy();
+                }
+            } catch (Exception ignored) {
+            }
+        }
+    }
+
     public MiniCacheClient getResource() {
         if (isClosed) {
             throw new IllegalStateException("Pool Closed");

@@ -57,6 +57,44 @@ public class MiniCacheCluster implements AutoCloseable {
         this.availablePools.addAll(nodePools.values());
     }
 
+    public MiniCacheCluster(String clusterNodesStr, int coreConnections,
+                            int maxConnections, boolean isStrictMode,
+                            int queuingTime, int connectTimeOut,
+                            int readTimeOut, int bufferSize,
+                            String username, String password) {
+        this.nodePools = new HashMap<>();
+        this.availablePools = new ArrayList<>();
+        this.isStrictMode = isStrictMode;
+        this.circuitBreaker = CircuitBreaker.of("minicache-cb", CircuitBreakerConfig.custom()
+                .failureRateThreshold(50)
+                .slowCallRateThreshold(50)
+                .slowCallDurationThreshold(Duration.ofSeconds(2))
+                .waitDurationInOpenState(Duration.ofSeconds(10))
+                .slidingWindowSize(20)
+                .recordExceptions(IOException.class, RuntimeException.class)
+                .build());
+
+        String[] nodes = clusterNodesStr.split(",");
+        for (String node : nodes) {
+            String[] parts = node.split(":");
+            String host = parts[0];
+            int port = Integer.parseInt(parts[1]);
+
+            // Mỗi một node vật lý quản lý bởi một pool kết nối độc lập
+            MiniCachePool pool = new MiniCachePool(host, port, coreConnections, maxConnections,
+                    queuingTime, connectTimeOut, readTimeOut, bufferSize, username, password);
+            nodePools.put(node.trim(), pool);
+
+            if (currentLeaderNodeId == null) {
+                currentLeaderNodeId = node.trim();
+            }
+        }
+        refreshLeaderDiscovery();
+
+        this.availablePools.clear();
+        this.availablePools.addAll(nodePools.values());
+    }
+
     /**
      * Hàm dùng để cô lập logic fallback khi không tìm thấy bất kỳ node nào phù hợp
      */
