@@ -4,6 +4,7 @@ import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import org.client.helper.ClusterAction;
 import org.client.helper.Constant;
+import org.client.model.AuthModel;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -61,7 +62,7 @@ public class MiniCacheCluster implements AutoCloseable {
                             int maxConnections, boolean isStrictMode,
                             int queuingTime, int connectTimeOut,
                             int readTimeOut, int bufferSize,
-                            String username, String password) {
+                            AuthModel authModel) {
         this.nodePools = new HashMap<>();
         this.availablePools = new ArrayList<>();
         this.isStrictMode = isStrictMode;
@@ -82,7 +83,8 @@ public class MiniCacheCluster implements AutoCloseable {
 
             // Mỗi một node vật lý quản lý bởi một pool kết nối độc lập
             MiniCachePool pool = new MiniCachePool(host, port, coreConnections, maxConnections,
-                    queuingTime, connectTimeOut, readTimeOut, bufferSize, username, password);
+                    queuingTime, connectTimeOut, readTimeOut, bufferSize,
+                    authModel.username(), authModel.password());
             nodePools.put(node.trim(), pool);
 
             if (currentLeaderNodeId == null) {
