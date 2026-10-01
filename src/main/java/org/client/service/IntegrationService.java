@@ -1,25 +1,44 @@
 package org.client.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.module.blackbird.BlackbirdModule;
 import org.client.annotation.ReadCommand;
 import org.client.annotation.WriteCommand;
 import org.client.collapser.SingleFlightCollapsingHandler;
 import org.client.exception.IntegrationException;
+import org.client.exception.ParsingException;
 import org.client.helper.Command;
+import org.client.model.FzSuggestModel;
+import org.client.model.FzWordModel;
 import org.client.pool.MiniCacheCluster;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class IntegrationService {
     private final MiniCacheCluster clusterClient;
     private final SingleFlightCollapsingHandler collapsingHandler;
+    private final ObjectMapper objectMapper;
 
     public IntegrationService(MiniCacheCluster clusterClient) {
         this.clusterClient = clusterClient;
         this.collapsingHandler = null;
+        this.objectMapper = JsonMapper.builder()
+                .addModule(new BlackbirdModule())
+                .build();
     }
 
     public IntegrationService(MiniCacheCluster clusterClient,
                               SingleFlightCollapsingHandler collapsingHandler) {
         this.clusterClient = clusterClient;
         this.collapsingHandler = collapsingHandler;
+        this.objectMapper = JsonMapper.builder()
+                .addModule(new BlackbirdModule())
+                .build();
     }
 
     @ReadCommand(Command.GET)
@@ -224,6 +243,21 @@ public class IntegrationService {
     }
 
     @ReadCommand(Command.Z_RANGE)
+    public String[] zRangeByPositionsAsObj(String key, Integer start, Integer stop) {
+        String val = this.zRangeByPositions(key, start, stop);
+        String[] result;
+
+        if (val == null || val.equals("[]")) {
+            result = new String[0];
+        } else {
+            result = Arrays.stream(val.substring(1, val.length() - 1).split(","))
+                    .map(String::trim)
+                    .toArray(String[]::new);
+        }
+        return result;
+    }
+
+    @ReadCommand(Command.Z_RANGE)
     public String zRangeByPositions(String key, Integer start, Integer stop) {
         if (this.collapsingHandler != null) {
             return this.collapsingHandler.execute(
@@ -244,6 +278,21 @@ public class IntegrationService {
     }
 
     @ReadCommand(Command.Z_RSCR)
+    public String[] zRangeByScoreAsObj(String key, Double minScore, Double maxScore) {
+        String val = this.zRangeByScore(key, minScore, maxScore);
+        String[] result;
+
+        if (val == null || val.equals("[]")) {
+            result = new String[0];
+        } else {
+            result = Arrays.stream(val.substring(1, val.length() - 1).split(","))
+                    .map(String::trim)
+                    .toArray(String[]::new);
+        }
+        return result;
+    }
+
+    @ReadCommand(Command.Z_RSCR)
     public String zRangeByScore(String key, Double minScore, Double maxScore) {
         if (this.collapsingHandler != null) {
             return this.collapsingHandler.execute(
@@ -261,6 +310,21 @@ public class IntegrationService {
         } catch (Exception e) {
             throw new IntegrationException("ERR_Z_RSCR", e);
         }
+    }
+
+    @ReadCommand(Command.Z_TOP)
+    public String[] zTopAsObj(String key, Integer top) {
+        String val = this.zTop(key, top);
+        String[] result;
+
+        if (val == null || val.equals("[]")) {
+            result = new String[0];
+        } else {
+            result = Arrays.stream(val.substring(1, val.length() - 1).split(","))
+                    .map(String::trim)
+                    .toArray(String[]::new);
+        }
+        return result;
     }
 
     @ReadCommand(Command.Z_TOP)
@@ -322,6 +386,21 @@ public class IntegrationService {
     }
 
     @ReadCommand(Command.GEO_SEARCH)
+    public String[] geoSearchAsObj(String key, Double centerLat, Double centerLon, Double radiusMeters, Integer limit) {
+        String val = this.geoSearch(key, centerLat, centerLon, radiusMeters, limit);
+        String[] result;
+
+        if (val == null || val.equals("[]")) {
+            result = new String[0];
+        } else {
+            result = Arrays.stream(val.substring(1, val.length() - 1).split(","))
+                    .map(String::trim)
+                    .toArray(String[]::new);
+        }
+        return result;
+    }
+
+    @ReadCommand(Command.GEO_SEARCH)
     public String geoSearch(String key, Double centerLat, Double centerLon, Double radiusMeters, Integer limit) {
         if (this.collapsingHandler != null) {
             return this.collapsingHandler.execute(
@@ -380,6 +459,19 @@ public class IntegrationService {
     }
 
     @ReadCommand(Command.GEO_GET)
+    public double[] geoGetAsObj(String key, String member) {
+        String val = this.geoGet(key, member);
+        try {
+            return objectMapper.readValue(
+                    val,
+                    double[].class
+            );
+        } catch (JsonProcessingException e) {
+            throw new ParsingException(e);
+        }
+    }
+
+    @ReadCommand(Command.GEO_GET)
     public String geoGet(String key, String member) {
         if (this.collapsingHandler != null) {
             return this.collapsingHandler.execute(
@@ -396,6 +488,20 @@ public class IntegrationService {
             return clusterClient.geoGet(key, member);
         } catch (Exception e) {
             throw new IntegrationException("ERR_GEO_GET", e);
+        }
+    }
+
+    @ReadCommand(Command.GEO_NB)
+    public Map<String, double[]> geoNbAsObj(String key, String member) {
+        String val = this.geoNb(key, member);
+        try {
+            return objectMapper.readValue(
+                    val,
+                    new TypeReference<>() {
+                    }
+            );
+        } catch (JsonProcessingException e) {
+            throw new ParsingException(e);
         }
     }
 
@@ -490,6 +596,20 @@ public class IntegrationService {
     }
 
     @ReadCommand(Command.H_ALL)
+    public Map<String, Object> hGetAllAsObj(String key) {
+        String val = this.hGetAll(key);
+        try {
+            return objectMapper.readValue(
+                    val,
+                    new TypeReference<>() {
+                    }
+            );
+        } catch (JsonProcessingException e) {
+            throw new ParsingException(e);
+        }
+    }
+
+    @ReadCommand(Command.H_ALL)
     public String hGetAll(String key) {
         if (this.collapsingHandler != null) {
             return this.collapsingHandler.execute(
@@ -564,6 +684,20 @@ public class IntegrationService {
     }
 
     @ReadCommand(Command.FZ_SEARCH)
+    public String[] fzSearchAsObj(String key, String query, Integer limit) {
+        String val = this.fzSearch(key, query, limit);
+        try {
+            return objectMapper.readValue(
+                    val,
+                    new TypeReference<>() {
+                    }
+            );
+        } catch (JsonProcessingException e) {
+            throw new ParsingException(e);
+        }
+    }
+
+    @ReadCommand(Command.FZ_SEARCH)
     public String fzSearch(String key, String query, Integer limit) {
         if (this.collapsingHandler != null) {
             return this.collapsingHandler.execute(
@@ -580,6 +714,20 @@ public class IntegrationService {
             return clusterClient.fzSearch(key, query, limit);
         } catch (Exception e) {
             throw new IntegrationException("ERR_FZ_SEARCH", e);
+        }
+    }
+
+    @ReadCommand(Command.FZ_SUGGEST)
+    public List<FzSuggestModel> fzSuggestAsObj(String key, String query, Integer limit, Integer maxDist) {
+        String val = this.fzSuggest(key, query, limit, maxDist);
+        try {
+            return objectMapper.readValue(
+                    val,
+                    new TypeReference<>() {
+                    }
+            );
+        } catch (JsonProcessingException e) {
+            throw new ParsingException(e);
         }
     }
 
@@ -604,6 +752,20 @@ public class IntegrationService {
     }
 
     @ReadCommand(Command.FZ_EXACT)
+    public FzWordModel fzGetExactAsObj(String key, String word) {
+        String val = this.fzGetExact(key, word);
+        try {
+            return objectMapper.readValue(
+                    val,
+                    new TypeReference<>() {
+                    }
+            );
+        } catch (JsonProcessingException e) {
+            throw new ParsingException(e);
+        }
+    }
+
+    @ReadCommand(Command.FZ_EXACT)
     public String fzGetExact(String key, String word) {
         if (this.collapsingHandler != null) {
             return this.collapsingHandler.execute(
@@ -624,6 +786,20 @@ public class IntegrationService {
     }
 
     @ReadCommand(Command.FZ_RANDOM)
+    public String[] fzRandomAsObj(String key, Integer limit) {
+        String val = this.fzRandom(key, limit);
+        try {
+            return objectMapper.readValue(
+                    val,
+                    new TypeReference<>() {
+                    }
+            );
+        } catch (JsonProcessingException e) {
+            throw new ParsingException(e);
+        }
+    }
+
+    @ReadCommand(Command.FZ_RANDOM)
     public String fzRandom(String key, Integer limit) {
         if (this.collapsingHandler != null) {
             return this.collapsingHandler.execute(
@@ -640,6 +816,20 @@ public class IntegrationService {
             return clusterClient.fzRandom(key, limit);
         } catch (Exception e) {
             throw new IntegrationException("ERR_FZ_RANDOM", e);
+        }
+    }
+
+    @ReadCommand(Command.FZ_PHONETIC)
+    public List<FzWordModel> fzPhoneticAsObj(String key, String input, Integer limit) {
+        String val = this.fzPhonetic(key, input, limit);
+        try {
+            return objectMapper.readValue(
+                    val,
+                    new TypeReference<>() {
+                    }
+            );
+        } catch (JsonProcessingException e) {
+            throw new ParsingException(e);
         }
     }
 

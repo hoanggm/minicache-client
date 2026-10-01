@@ -1,6 +1,6 @@
 package org.client.exception;
 
-public class IntegrationException extends RuntimeException{
+public class IntegrationException extends RuntimeException {
     private final String message;
     private final Exception cause;
 
