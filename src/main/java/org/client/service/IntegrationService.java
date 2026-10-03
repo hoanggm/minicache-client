@@ -873,4 +873,11 @@ public class IntegrationService {
             throw new IntegrationException("ERR_FZ_EXISTS", e);
         }
     }
+
+    public void close() throws Exception {
+        try {
+            this.clusterClient.close();
+        } catch (Exception ignored) {
+        }
+    }
 }
