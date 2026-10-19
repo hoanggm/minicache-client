@@ -124,10 +124,10 @@ public class MiniCacheCluster implements AutoCloseable {
                         mncPool.changeState(MiniCachePool.POOL_STATE.NOT_AVAILABLE);
                     }
                 }
-                refreshLeaderDiscovery();
             } finally {
                 rwLock.writeLock().unlock();
             }
+            refreshLeaderDiscovery();
         } else if (transition.contains("TO_CLOSED")) {
             rwLock.writeLock().lock();
             try {
@@ -136,10 +136,10 @@ public class MiniCacheCluster implements AutoCloseable {
                         mncPool.changeState(MiniCachePool.POOL_STATE.AVAILABLE);
                     }
                 }
-                refreshLeaderDiscovery();
             } finally {
                 rwLock.writeLock().unlock();
             }
+            refreshLeaderDiscovery();
         }
     }
 
