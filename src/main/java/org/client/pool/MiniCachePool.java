@@ -3,6 +3,7 @@ package org.client.pool;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MiniCachePool implements AutoCloseable {
     private final LinkedBlockingQueue<MiniCacheClient> pool;
@@ -15,10 +16,17 @@ public class MiniCachePool implements AutoCloseable {
     private final int clientConnectTimeout;
     private final int clientReadTimeout;
     private final int clientDataBufferSize;
+    private final String nodeId;
+    private final AtomicReference<POOL_STATE> state;
+
+    public enum POOL_STATE {
+        AVAILABLE,
+        NOT_AVAILABLE
+    }
 
     public MiniCachePool(String host, int port, int coreConnections, int maxConnections,
                          int queuingTime, int clientConnectTimeout, int clientReadTimeout,
-                         int bufferSize) {
+                         int bufferSize, String nodeId) {
         this.host = host;
         this.port = port;
         this.maxConnections = maxConnections;
@@ -28,6 +36,8 @@ public class MiniCachePool implements AutoCloseable {
         this.clientConnectTimeout = clientConnectTimeout;
         this.clientReadTimeout = clientReadTimeout;
         this.clientDataBufferSize = bufferSize;
+        this.nodeId = nodeId;
+        this.state = new AtomicReference<>(POOL_STATE.AVAILABLE);
 
         for (int i = 0; i < coreConnections; i++) {
             try {
@@ -46,7 +56,7 @@ public class MiniCachePool implements AutoCloseable {
 
     public MiniCachePool(String host, int port, int coreConnections, int maxConnections,
                          int queuingTime, int clientConnectTimeout, int clientReadTimeout,
-                         int bufferSize, String username, String password) {
+                         int bufferSize, String username, String password, String nodeId) {
         this.host = host;
         this.port = port;
         this.maxConnections = maxConnections;
@@ -56,6 +66,8 @@ public class MiniCachePool implements AutoCloseable {
         this.clientConnectTimeout = clientConnectTimeout;
         this.clientReadTimeout = clientReadTimeout;
         this.clientDataBufferSize = bufferSize;
+        this.nodeId = nodeId;
+        this.state = new AtomicReference<>(POOL_STATE.AVAILABLE);
 
         for (int i = 0; i < coreConnections; i++) {
             try {
@@ -127,6 +139,18 @@ public class MiniCachePool implements AutoCloseable {
             client.destroy();
             currentConnections.decrementAndGet();
         }
+    }
+
+    public String getNodeId() {
+        return this.nodeId;
+    }
+
+    public POOL_STATE getState() {
+        return this.state.get();
+    }
+
+    public void changeState(POOL_STATE state) {
+        this.state.set(state);
     }
 
     @Override

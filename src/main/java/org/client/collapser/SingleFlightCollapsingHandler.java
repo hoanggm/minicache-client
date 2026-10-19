@@ -13,7 +13,7 @@ public class SingleFlightCollapsingHandler {
     private final long timeoutMillis;
 
     public SingleFlightCollapsingHandler() {
-        this(3000);
+        this(1000);
     }
 
     public SingleFlightCollapsingHandler(long timeoutMillis) {
@@ -52,7 +52,7 @@ public class SingleFlightCollapsingHandler {
             if (cause instanceof IntegrationException) {
                 throw (IntegrationException) cause;
             }
-            throw new IntegrationException("ERR_SINGLE_FLIGHT_TIMEOUT", ex);
+            return supplier.get();
         }
     }
 }

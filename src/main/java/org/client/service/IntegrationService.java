@@ -874,7 +874,7 @@ public class IntegrationService {
         }
     }
 
-    public void close() throws Exception {
+    public void close() {
         try {
             this.clusterClient.close();
         } catch (Exception ignored) {

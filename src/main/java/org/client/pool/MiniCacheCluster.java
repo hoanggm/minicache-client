@@ -13,13 +13,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class MiniCacheCluster implements AutoCloseable {
     private final Map<String, MiniCachePool> nodePools;
     private final List<MiniCachePool> availablePools;
     private final Boolean isStrictMode;
-    private final CircuitBreaker circuitBreaker;
     private String currentLeaderNodeId;
+    private final Map<String, CircuitBreaker> nodeCircuitBreakers;
+    private final ReentrantReadWriteLock rwLock;
 
     public MiniCacheCluster(String clusterNodesStr, int coreConnections,
                             int maxConnections, boolean isStrictMode,
@@ -28,14 +30,8 @@ public class MiniCacheCluster implements AutoCloseable {
         this.nodePools = new HashMap<>();
         this.availablePools = new ArrayList<>();
         this.isStrictMode = isStrictMode;
-        this.circuitBreaker = CircuitBreaker.of("minicache-cb", CircuitBreakerConfig.custom()
-                .failureRateThreshold(50)
-                .slowCallRateThreshold(50)
-                .slowCallDurationThreshold(Duration.ofSeconds(2))
-                .waitDurationInOpenState(Duration.ofSeconds(10))
-                .slidingWindowSize(20)
-                .recordExceptions(IOException.class, RuntimeException.class)
-                .build());
+        this.nodeCircuitBreakers = new HashMap<>();
+        this.rwLock = new ReentrantReadWriteLock();
 
         String[] nodes = clusterNodesStr.split(",");
         for (String node : nodes) {
@@ -45,12 +41,23 @@ public class MiniCacheCluster implements AutoCloseable {
 
             // Mỗi một node vật lý quản lý bởi một pool kết nối độc lập
             MiniCachePool pool = new MiniCachePool(host, port, coreConnections, maxConnections,
-                    queuingTime, connectTimeOut, readTimeOut, bufferSize);
+                    queuingTime, connectTimeOut, readTimeOut, bufferSize, node.trim());
             nodePools.put(node.trim(), pool);
 
             if (currentLeaderNodeId == null) {
                 currentLeaderNodeId = node.trim();
             }
+
+            CircuitBreaker cb = CircuitBreaker.of(node.trim(),
+                    CircuitBreakerConfig.custom()
+                            .failureRateThreshold(50)
+                            .slowCallRateThreshold(50)
+                            .slowCallDurationThreshold(Duration.ofSeconds(1))
+                            .waitDurationInOpenState(Duration.ofSeconds(10))
+                            .slidingWindowSize(10)
+                            .build());
+            cb.getEventPublisher().onStateTransition(event -> this.onCircuitBreakerStateTransition(event, cb));
+            nodeCircuitBreakers.put(node.trim(), cb);
         }
         refreshLeaderDiscovery();
 
@@ -66,14 +73,8 @@ public class MiniCacheCluster implements AutoCloseable {
         this.nodePools = new HashMap<>();
         this.availablePools = new ArrayList<>();
         this.isStrictMode = isStrictMode;
-        this.circuitBreaker = CircuitBreaker.of("minicache-cb", CircuitBreakerConfig.custom()
-                .failureRateThreshold(50)
-                .slowCallRateThreshold(50)
-                .slowCallDurationThreshold(Duration.ofSeconds(2))
-                .waitDurationInOpenState(Duration.ofSeconds(10))
-                .slidingWindowSize(20)
-                .recordExceptions(IOException.class, RuntimeException.class)
-                .build());
+        this.nodeCircuitBreakers = new HashMap<>();
+        this.rwLock = new ReentrantReadWriteLock();
 
         String[] nodes = clusterNodesStr.split(",");
         for (String node : nodes) {
@@ -84,17 +85,62 @@ public class MiniCacheCluster implements AutoCloseable {
             // Mỗi một node vật lý quản lý bởi một pool kết nối độc lập
             MiniCachePool pool = new MiniCachePool(host, port, coreConnections, maxConnections,
                     queuingTime, connectTimeOut, readTimeOut, bufferSize,
-                    authModel.username(), authModel.password());
+                    authModel.username(), authModel.password(), node.trim());
             nodePools.put(node.trim(), pool);
 
             if (currentLeaderNodeId == null) {
                 currentLeaderNodeId = node.trim();
             }
+
+            CircuitBreaker cb = CircuitBreaker.of(node.trim(),
+                    CircuitBreakerConfig.custom()
+                            .failureRateThreshold(50)
+                            .slowCallRateThreshold(50)
+                            .slowCallDurationThreshold(Duration.ofSeconds(1))
+                            .waitDurationInOpenState(Duration.ofSeconds(10))
+                            .slidingWindowSize(10)
+                            .build());
+            cb.getEventPublisher().onStateTransition(event -> this.onCircuitBreakerStateTransition(event, cb));
+            nodeCircuitBreakers.put(node.trim(), cb);
         }
         refreshLeaderDiscovery();
 
         this.availablePools.clear();
         this.availablePools.addAll(nodePools.values());
+    }
+
+    /**
+     * Hàm thực thi khi CircuitBreaker chuyển đổi trạng thái
+     */
+    private void onCircuitBreakerStateTransition(io.github.resilience4j.circuitbreaker.event.CircuitBreakerOnStateTransitionEvent event,
+                                                 CircuitBreaker cb) {
+        String transition = event.getStateTransition().toString();
+        String nodeId = cb.getName();
+        if (transition.contains("TO_OPEN")) {
+            rwLock.writeLock().lock();
+            try {
+                for (MiniCachePool mncPool : availablePools) {
+                    if (mncPool.getNodeId().equals(nodeId)) {
+                        mncPool.changeState(MiniCachePool.POOL_STATE.NOT_AVAILABLE);
+                    }
+                }
+                refreshLeaderDiscovery();
+            } finally {
+                rwLock.writeLock().unlock();
+            }
+        } else if (transition.contains("TO_CLOSED")) {
+            rwLock.writeLock().lock();
+            try {
+                for (MiniCachePool mncPool : availablePools) {
+                    if (mncPool.getNodeId().equals(nodeId)) {
+                        mncPool.changeState(MiniCachePool.POOL_STATE.AVAILABLE);
+                    }
+                }
+                refreshLeaderDiscovery();
+            } finally {
+                rwLock.writeLock().unlock();
+            }
+        }
     }
 
     /**
@@ -111,6 +157,9 @@ public class MiniCacheCluster implements AutoCloseable {
      * Lấy pool dựa trên vai trò thao tác dữ liệu
      */
     private MiniCachePool getPool(boolean isWrite) {
+        var pool = availablePools.stream()
+                .filter(x -> x.getState().equals(MiniCachePool.POOL_STATE.AVAILABLE))
+                .toList();
         MiniCachePool leaderPool = (currentLeaderNodeId != null) ? nodePools.get(currentLeaderNodeId) : null;
 
         if (this.isStrictMode) {
@@ -121,73 +170,64 @@ public class MiniCacheCluster implements AutoCloseable {
             return (leaderPool != null) ? leaderPool : getFallbackPool();
         }
 
-        int size = availablePools.size();
+        int size = pool.size();
         if (size == 0) {
             return getFallbackPool();
         }
         if (size == 1) {
-            return availablePools.get(0);
+            return pool.get(0);
         }
 
         int randomIndex = ThreadLocalRandom.current().nextInt(size);
-        return availablePools.get(randomIndex);
+        return pool.get(randomIndex);
     }
 
     /**
      * Cơ chế quét tìm Leader (Leader Discovery) bằng cách hỏi thăm tuần tự các Node
      */
-    public synchronized void refreshLeaderDiscovery() {
-        for (String node : nodePools.keySet()) {
-            try (MiniCacheClient client = nodePools.get(node).getResource()) {
-                String pingResponse = client.ping();
-                if (Constant.LEADER.equalsIgnoreCase(pingResponse) || Constant.PONG.equalsIgnoreCase(pingResponse)) {
-                    this.currentLeaderNodeId = node;
-                    return;
+    public void refreshLeaderDiscovery() {
+        rwLock.writeLock().lock();
+        try {
+            for (String node : nodePools.keySet()) {
+                try (MiniCacheClient client = nodePools.get(node).getResource()) {
+                    String pingResponse = client.ping();
+                    if (Constant.LEADER.equalsIgnoreCase(pingResponse) || Constant.PONG.equalsIgnoreCase(pingResponse)) {
+                        this.currentLeaderNodeId = node;
+                        return;
+                    }
+                } catch (Exception ignored) {
                 }
-            } catch (Exception ignored) {
             }
+        } finally {
+            rwLock.writeLock().unlock();
         }
     }
 
     public String doExecute(ClusterAction action, boolean isWrite) throws IOException {
-        try {
-            return circuitBreaker.executeCheckedSupplier(() -> {
-                int retries = this.nodePools.size();
-                if (retries == 0) {
-                    retries = 3;
-                }
+        int retries = this.nodePools.size();
+        Throwable lastException = null;
 
-                while (retries > 0) {
-                    MiniCachePool targetPool = getPool(isWrite);
-                    if (targetPool == null) {
-                        refreshLeaderDiscovery();
-                        retries--;
-                        continue;
-                    }
+        while (retries > 0) {
+            MiniCachePool targetPool = getPool(isWrite);
+            String targetNodeKey = targetPool.getNodeId();
+            CircuitBreaker cb = nodeCircuitBreakers.get(targetNodeKey);
 
+            try {
+                return cb.executeCheckedSupplier(() -> {
                     try (MiniCacheClient client = targetPool.getResource()) {
                         return action.execute(client);
-                    } catch (Exception e) {
-                        retries--;
-
-                        // Chỉ chủ động kích hoạt quét lại cụm (Leader Discovery) ở những lượt thử cuối
-                        if (retries == 1 || retries == 0) {
-                            refreshLeaderDiscovery();
-                        }
-
-                        if (retries == 0) {
-                            throw new IOException("Cluster unavailable after maximizing retries. Last error: " + e.getMessage(), e);
-                        }
                     }
-                }
-                throw new IOException("Failed to execute cluster command due to empty routing path");
-            });
-        } catch (io.github.resilience4j.circuitbreaker.CallNotPermittedException e) {
-            throw new IOException("Circuit Breaker OPEN", e);
-        } catch (Throwable t) {
-            if (t instanceof IOException) throw (IOException) t;
-            throw new IOException("Cluster Error", t);
+                });
+            } catch (io.github.resilience4j.circuitbreaker.CallNotPermittedException e) {
+                lastException = e;
+                retries--;
+            } catch (Throwable t) {
+                lastException = t;
+                retries--;
+                refreshLeaderDiscovery();
+            }
         }
+        throw new IOException("Cluster unavailable after retries", lastException);
     }
 
     public String set(String key, String value) throws IOException {
